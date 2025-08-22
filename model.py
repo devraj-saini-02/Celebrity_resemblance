@@ -50,9 +50,11 @@ validation_ds   = validation_ds.map(lambda x, y: (preprocess_input(tf.cast(x, tf
 conv_base=keras.applications.ResNet50(include_top=False, weights='imagenet', input_shape=(224,224,3))
 set_trainable = False
 for layer in conv_base.layers:
-    if "conv4_block" in layer.name or "conv5_block" or "conv3_block"  in layer.name:
-        set_trainable = True
-    layer.trainable = set_trainable
+     if ("conv4_block" in layer.name) or ("conv5_block" in layer.name) or ("conv3_block" in layer.name):
+        layer.trainable = True
+    else:
+        layer.trainable = False
+
     #Architecture
 model=Sequential()
 model.add(conv_base)
