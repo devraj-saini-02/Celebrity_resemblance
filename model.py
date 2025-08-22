@@ -9,12 +9,9 @@ from tensorflow.keras.applications.resnet50 import preprocess_input
 from tensorflow.keras.callbacks import ModelCheckpoint
 import gradio as gr
 
-# --------------------------------------------------------------------
 # Download dataset from Kaggle
-# --------------------------------------------------------------------
 path = kagglehub.dataset_download("vishesh1412/celebrity-face-image-dataset")
 print("Path to dataset files:", path)
-
 # Dataset is inside: Celebrity Faces Dataset/
 dataset_dir = f"{path}/Celebrity Faces Dataset"
 
@@ -68,7 +65,7 @@ conv_base = keras.applications.ResNet50(include_top=False, weights='imagenet', i
 
 # Fine-tuning: unfreeze conv3, conv4, conv5 blocks
 for layer in conv_base.layers:
-    if ("conv3_block" in layer.name) or ("conv4_block" in layer.name) or ("conv5_block" in layer.name):
+    if  ("conv4_block" in layer.name) or ("conv5_block" in layer.name):
         layer.trainable = True
     else:
         layer.trainable = False
@@ -76,10 +73,10 @@ for layer in conv_base.layers:
 # Model Architecture
 model = Sequential()
 model.add(conv_base)
-model.add(layers.GlobalAveragePooling2D())   # better than Flatten
+model.add(layers.GlobalAveragePooling2D())   
 model.add(Dense(256, activation='relu'))
 model.add(Dropout(0.5))
-num_classes = train_ds.cardinality().numpy()  # auto-detect number of classes
+num_classes = train_ds.cardinality().numpy()  
 model.add(Dense(num_classes, activation='softmax'))
 
 model.compile(
