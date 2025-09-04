@@ -74,8 +74,10 @@ for layer in conv_base.layers:
 model = Sequential()
 model.add(conv_base)
 model.add(layers.GlobalAveragePooling2D())   
-model.add(Dense(256, activation='relu'))
+model.add(Dense(128, activation='relu'))
 model.add(Dropout(0.5))
+model.add(Dense(32,activation='relu'))
+model.add(Dropout(0.3))
 num_classes = train_ds.cardinality().numpy()  
 model.add(Dense(num_classes, activation='softmax'))
 
